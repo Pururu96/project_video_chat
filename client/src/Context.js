@@ -37,7 +37,23 @@ const ContextProvider = ({ children }) => {
   const answerCall = () => {
     setCallAccepted(true);
 
-    const peer = new Peer({ initiator: false, trickle: false, stream });
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      config: {
+        iceServers: [
+          {
+            urls: 'stun:stun.stunprotocol.org',
+          },
+          {
+            urls: 'turn:numb.viagenie.ca',
+            credential: 'muazkh',
+            username: 'webrtc@live.com',
+          },
+        ],
+      },
+      stream,
+    });
 
     peer.on('signal', (data) => {
       socket.emit('answerCall', { signal: data, to: call.from });
